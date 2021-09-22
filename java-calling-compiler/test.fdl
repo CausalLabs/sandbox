@@ -1,0 +1,6 @@
+feature Dummy {
+    event Dummy
+    {
+        
+    }
+}

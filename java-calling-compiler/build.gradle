@@ -1,0 +1,21 @@
+plugins {
+   id 'application'
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    // io.causallabs jars come from here
+    maven { url 'https://maven.causallabs.io' }
+}
+
+dependencies
+{
+    implementation 'io.causallabs:compiler:0.44.0'
+}
+
+application
+{
+    mainClass = 'io.causallabs.example.CallingCompiler'
+}

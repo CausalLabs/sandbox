@@ -1,0 +1,43 @@
+
+namespace "io.causallabs.example"
+
+session {
+    args {
+        visitorId : ID! @persistent_key
+        arrivalId : ID! @session_key
+        userId : ID @mutable
+    }
+    plugin java "SessionPlugin" {
+        userZipCode : String! = ""
+    }
+    event Click {
+        clickValue : Int!
+    }
+}
+
+feature Simple
+{
+    args {
+        simpleInput : Int!
+    }
+    plugin java "SimplePlugin" {
+        """This value is set by the io.causallabs.example.SimplePlugin class. 
+        If the class doesn't fill in the value, the default of '0' will be used. """
+        simplePluginOutput : Int! = 0
+    }
+    output {
+        simpleOutput : Int = 42 @external( values: ["BigNumber", "SmallNumber"] )
+    }
+    event Click {
+        clickValue : Int!
+        plugin java "SimpleClickPlugin" {}
+    }
+}
+
+feature SimpleGeneric
+{
+    plugin {
+        "This output can only be set by the Generic plugin methods"
+        anotherOutput : Int! = 0
+    }
+}
