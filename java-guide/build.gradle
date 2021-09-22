@@ -1,0 +1,40 @@
+
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url 'https://maven.causallabs.io' }
+}
+
+dependencies
+{
+    implementation 'io.causallabs:runtime:0.16.0'
+}
+
+// generate the java source for the Causal API
+task generateFdlSource(type: Exec) {
+    commandLine 'causalc', '--java', 'build/generated/fdl', 'example.fdl'
+}
+compileJava.dependsOn(generateFdlSource)
+
+// Include the Causal generated code in the build
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/fdl'
+        }
+    }
+}
+
+task fatJar(type: Jar) {
+    archiveBaseName = 'example-plugin'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.findAll 
+        { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+    with jar
+}
+fatJar.dependsOn(jar)
